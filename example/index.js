@@ -1,5 +1,7 @@
-require('../');
+'use strict';
+/* global mapboxgl */
 
+require('../');
 mapboxgl.accessToken = window.localStorage.getItem('MapboxAccessToken');
 
 var map = new mapboxgl.Map({
@@ -16,19 +18,19 @@ button.textContent = 'click me';
 map.getContainer().querySelector('.mapboxgl-ctrl-bottom-left').appendChild(button);
 map.addControl(geocoder);
 
-map.on('load', () => {
+map.on('load', function() {
   button.addEventListener('click', function() {
     geocoder.query('Montreal Quebec');
   });
 });
 
-geocoder.on('geocoder.input', getResult);
+geocoder.on('result', getResult);
 
 function getResult() {
   console.log('Fetched', geocoder.getResult());
-  geocoder.off('geocoder.input', getResult);
+  geocoder.off('result', getResult);
 }
 
-geocoder.on('geocoder.error', function(e) {
+geocoder.on('error', function(e) {
   console.log('Error is', e.error);
 });
